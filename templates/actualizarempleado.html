@@ -5,11 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/nuevoempleado.css') }}">
-    <title>Nuevo empleado</title>
+    <title>Actualizar empleado</title>
 </head>
 <body>
-    <h1>Formulario para nuevo empleado</h1>
-    <form action="nuevoempleado" method="post">
+    <h1>Formulario para actualizar empleado</h1>
+    <form action="actualizarempleado" method="post">
+
+        <section>
+        <label for="idemp">ID:</label>
+        <select id="idemp" name="idEmpleado">
+            {% for id in id_list %}
+            <option value={{id[0]}}>{{id}}</option>
+            {% endfor %}
+        </select>
+        </section>
 
         <section>
         <label for="name">Nombre:</label>
@@ -31,7 +40,7 @@
         </section>
 
         <button type="submit">Crear</button>
-        
+
     </form>
 </body>
 </html>
