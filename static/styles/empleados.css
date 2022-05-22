@@ -1,0 +1,55 @@
+html{
+    font-size:10px;
+    margin:0;
+    padding: 0;
+    font-family: sans-serif;
+}
+body {
+    margin:0;
+}
+h1{
+    margin: 3rem 0;
+    text-align: center;
+    font-size: 4rem;
+}
+.list{
+    /* border-radius: 3rem; */
+    align-self: center;
+    margin: 0 auto;
+    padding: 0;
+    background-color: #cbd5e8;
+    list-style: none;
+    display: flex;
+    max-width: 70%;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+.list li{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.list li:hover{
+    background-color: #afc0df;
+}
+.list .list-title{
+    font-weight: bold;
+}
+.list li img{
+    width: 6rem;
+    margin: 1rem;
+}
+.list li p{
+    font-size:1.5rem;
+}
+.list li .id{
+    min-width: 5rem;
+}
+.list li .name{
+    min-width: 15rem;
+}.list li .charge{
+    min-width: 5rem;
+}
+.list li .email{
+    min-width: 25rem;
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empleados</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/empleados.css') }}">
+</head>
+<body>
+    <h1>Lista de empleados de la empresa</h1>
+
+    <ul class="list">
+        <li class="list-title">
+            <img src="" alt="">
+            <p class="id">ID</p>
+            <p class="name">Nombre</p>
+            <p class="charge">Cargo</p>
+            <p class="email">Email</p>    
+        </li>
+    {% for employee in employee_list %}
+        <li>
+        <img src="https://avatars.dicebear.com/api/bottts/{{employee.email}}.svg">
+        <p class="id">{{employee.id}}</p>
+        <p class="name">{{employee.name}}</p>
+        <p class="charge">{{employee.charge}}</p>
+        <p class="email">{{employee.email}}</p>
+        </li>
+    {% endfor %}
+    </ul>
+    
+</body>
+</html>
