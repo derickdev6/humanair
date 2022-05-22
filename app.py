@@ -20,7 +20,9 @@ def home():
 @app.route('/empleados')
 def empleados():
     employee_list = []
-    query = dbf.read("""SELECT * FROM empleados""")
+    query = dbf.read(
+        """SELECT idEmpleado, nombre, c.descripcion, correo FROM empleados e inner join cargos c on e.idCargo = c.idCargo """
+    )
     for item in query:
         new_emp = Employee(item[0], item[1], item[2], item[3])
         employee_list.append(new_emp)
