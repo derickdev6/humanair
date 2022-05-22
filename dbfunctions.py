@@ -11,11 +11,11 @@ def read(sql_sentence, *single):
     cursor = sqliteConnection.cursor()
     # Print statement and execution
     if single:
-        print("Single user")
+        print("Single")
         cursor.execute(sql_sentence)
         return cursor.fetchone()
     else:
-        print("Multiple user")
+        print("Multiple")
         cursor.execute(sql_sentence)
         return cursor.fetchall()
 
