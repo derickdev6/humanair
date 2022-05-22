@@ -16,7 +16,8 @@ def home():
     return render_template('home.html')
 
 
-#Vista en la cual se ven todos los empleados, falta implementar que el cargo sea asociado con el nombre
+# Vista en la cual se ven todos los empleados
+# A partir de esta vista se puede acceder a create, update y delete
 @app.route('/empleados')
 def empleados():
     employee_list = []
@@ -30,6 +31,10 @@ def empleados():
     return render_template('empleados.html', employee_list=employee_list)
 
 
+# Esta ruta funciona como vista y como post
+# Cuando es vista renderiza el formulario de nuevo empleado
+# En el formulario el boton de crear manda un post a su misma ruta,
+# donde se ejecuta un llamado a la funcion de create con los datos del formulario
 @app.route('/nuevoempleado', methods=['GET', 'POST'])
 def nuevoempleado():
     if request.method == 'GET':
@@ -47,44 +52,38 @@ def nuevoempleado():
         dbf.create(
             f"""INSERT INTO empleados (idCargo, nombre, correo) VALUES({new_employee.charge}, "{new_employee.name}", "{new_employee.email}")"""
         )
-        return redirect(url_for('nuevoempleado'))
+        return redirect(url_for('empleados'))
 
 
-@app.route('/actualizarempleado', methods=['GET', 'POST'])
+@app.route('/actualizacionempleado', methods=['POST'])
+def actualizacionempleado():
+    updt_employee = Employee(int(request.form['idEmpleado']),
+                             request.form['nombre'],
+                             int(request.form['cargo']),
+                             request.form['correo'])
+    dbf.update(
+        f"""UPDATE empleados SET nombre = '{updt_employee.name}', idCargo = {updt_employee.charge}, correo = '{updt_employee.email}' WHERE idEmpleado = {updt_employee.id}"""
+    )
+    return redirect(url_for('empleados'))
+
+
+@app.route('/actualizarempleado', methods=['POST'])
 def actualizarempleado():
-    if request.method == 'GET':
-        charges_list = []
-        query = dbf.read("""SELECT * FROM cargos""")
-        for item in query:
-            new_charge = Charge(item[0], item[1])
-            charges_list.append(new_charge)
-        id_list = dbf.read(
-            """SELECT idEmpleado, nombre, c.descripcion FROM empleados e inner join cargos c on e.idCargo = c.idCargo ORDER BY nombre"""
-        )
-        # id_list = dbf.read("""SELECT idEmpleado FROM empleados""")
-        return render_template('actualizarempleado.html',
-                               charges_list=charges_list,
-                               id_list=id_list)
-    elif request.method == 'POST':
-        updt_employee = Employee(int(request.form['idEmpleado']),
-                                 request.form['nombre'],
-                                 int(request.form['cargo']),
-                                 request.form['correo'])
-        dbf.update(
-            f"""UPDATE empleados SET nombre = '{updt_employee.name}', idCargo = {updt_employee.charge}, correo = '{updt_employee.email}' WHERE idEmpleado = {updt_employee.id}"""
-        )
-        return redirect(url_for('actualizarempleado'))
+    charges_list = []
+    query = dbf.read("""SELECT * FROM cargos""")
+    for item in query:
+        new_charge = Charge(item[0], item[1])
+        charges_list.append(new_charge)
+    emp_to_update = Employee(int(request.form['idEmpleado']),
+                             request.form['nombre'], 1, request.form['correo'])
+    return render_template('actualizarempleado.html',
+                           charges_list=charges_list,
+                           emp_to_update=emp_to_update)
 
 
-@app.route('/eliminarempleado', methods=['GET', 'POST'])
+@app.route('/eliminarempleado', methods=['POST'])
 def eliminarempleado():
-    if request.method == 'GET':
-        id_list = dbf.read(
-            """SELECT idEmpleado, nombre, c.descripcion FROM empleados e inner join cargos c on e.idCargo = c.idCargo ORDER BY nombre"""
-        )
-        return render_template('eliminarempleado.html', id_list=id_list)
-    elif request.method == 'POST':
-        dbf.delete(
-            f"""DELETE FROM empleados WHERE idEmpleado = {request.form['idEmpleado']}"""
-        )
-        return redirect(url_for('eliminarempleado'))
+    dbf.delete(
+        f"""DELETE FROM empleados WHERE idEmpleado = {request.form['idEmpleado']}"""
+    )
+    return redirect(url_for('empleados'))

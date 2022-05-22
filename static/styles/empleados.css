@@ -7,10 +7,26 @@ html{
 body {
     margin:0;
 }
-h1{
+header{
     margin: 3rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+header h1{
+    margin: 0;
     text-align: center;
     font-size: 4rem;
+    width: 80%;
+}
+a{
+    margin: 0 2rem 0 0;
+    text-decoration: none;
+    color: #000;
+    padding: .5rem;
+    background-color: #cbd5e8;
+    border-radius: 1rem;
+    font-size: 1.5rem;
 }
 .list{
     /* border-radius: 3rem; */
@@ -24,10 +40,11 @@ h1{
     flex-wrap: wrap;
 }
 .list li{
-    border-radius: 3rem;
+    border-radius: 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    transition: .2s;
 }
 .list .item:hover{
     background-color: #cbd5e8;
@@ -52,4 +69,40 @@ h1{
 }
 .list li .email{
     min-width: 25rem;
+}
+.list li .tools{
+    display: flex;
+    flex-direction: column;
+    margin: 0 1rem 0 0;
+    opacity: 0;
+    transition: .2s;
+}
+.list li .tools button{
+    text-align: center;
+    text-decoration: none;
+    padding: .2rem;
+    margin: .2rem 0;
+    height: 2rem;
+    width: 2rem;
+    border: none;
+    border-radius: .8rem;
+    color: #fff;
+    transition: .1s;
+    font-weight: bold;
+
+}
+.list li .tools button:hover{
+    cursor: pointer;
+}
+.list li .tools button:active{
+    background-color: #fff;
+}
+.list li .tools .delete{
+    background-color: #ca5757;
+}
+.list li .tools .update{
+    background-color: #406da7;
+}
+.list li:hover .tools{
+    opacity: 1;
 }

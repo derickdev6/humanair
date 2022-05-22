@@ -8,7 +8,12 @@
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/empleados.css') }}">
 </head>
 <body>
-    <h1>Lista de empleados de la empresa</h1>
+    <header>
+        <a href="/">Inicio</a>
+        <a href="nuevoempleado">Nuevo</a>
+        <h1>Lista de empleados de la empresa</h1>
+    </header>
+
 
     <ul class="list">
         <li class="list-title">
@@ -16,7 +21,8 @@
             <p class="id">ID</p>
             <p class="name">Nombre</p>
             <p class="charge">Cargo</p>
-            <p class="email">Email</p>    
+            <p class="email">Email</p> 
+            <p class="tools"></p>   
         </li>
     {% for employee in employee_list %}
         <li class="item">
@@ -25,6 +31,15 @@
         <p class="name">{{employee.name}}</p>
         <p class="charge">{{employee.charge}}</p>
         <p class="email">{{employee.email}}</p>
+
+        <form class="tools" id="deleteform" method="post">
+            <button class="delete" formaction="eliminarempleado">X</button>
+            <button class="update" formaction="actualizarempleado">∆</button>
+            <input type="hidden" name="idEmpleado" value="{{employee.id}}">
+            <input type="hidden" name="nombre" value="{{employee.name}}">
+            <input type="hidden" name="correo" value="{{employee.email}}">
+        </form>
+
         </li>
     {% endfor %}
     </ul>
