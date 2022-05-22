@@ -74,3 +74,17 @@ def actualizarempleado():
             f"""UPDATE empleados SET nombre = '{updt_employee.name}', idCargo = {updt_employee.charge}, correo = '{updt_employee.email}' WHERE idEmpleado = {updt_employee.id}"""
         )
         return redirect(url_for('actualizarempleado'))
+
+
+@app.route('/eliminarempleado', methods=['GET', 'POST'])
+def eliminarempleado():
+    if request.method == 'GET':
+        id_list = dbf.read(
+            """SELECT idEmpleado, nombre, c.descripcion FROM empleados e inner join cargos c on e.idCargo = c.idCargo ORDER BY nombre"""
+        )
+        return render_template('eliminarempleado.html', id_list=id_list)
+    elif request.method == 'POST':
+        dbf.delete(
+            f"""DELETE FROM empleados WHERE idEmpleado = {request.form['idEmpleado']}"""
+        )
+        return redirect(url_for('eliminarempleado'))
