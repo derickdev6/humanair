@@ -17,7 +17,6 @@ h1{
     align-self: center;
     margin: 0 auto;
     padding: 0;
-    background-color: #cbd5e8;
     list-style: none;
     display: flex;
     max-width: 70%;
@@ -25,12 +24,13 @@ h1{
     flex-wrap: wrap;
 }
 .list li{
+    border-radius: 3rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
-.list li:hover{
-    background-color: #afc0df;
+.list .item:hover{
+    background-color: #cbd5e8;
 }
 .list .list-title{
     font-weight: bold;
