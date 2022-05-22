@@ -31,8 +31,17 @@ def read(sql_sentence, *single):
         return cursor.fetchall()
 
 
-def update():
-    pass
+def update(sql_sentence):
+    # Connects to DB
+    sqliteConnection = sqlite3.connect('humanairDB.sqlite')
+    cursor = sqliteConnection.cursor()
+    # Print statement and execution
+    cursor.execute(sql_sentence)
+    sqliteConnection.commit()
+    if cursor.rowcount > 0:
+        print(f'succesfully updated {cursor.rowcount} items')
+    # cursor.close()
+    return True if cursor.rowcount > 0 else False
 
 
 def delete():
