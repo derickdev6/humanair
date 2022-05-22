@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/nuevoempleado.css') }}">
+    <title>Nuevo empleado</title>
+</head>
+<body>
+    <h1>Formulario para nuevo empleado</h1>
+    <form action="nuevoempleado" method="post">
+        <section>
+        <label for="name">Nombre:</label>
+        <input type="text", id="name", placeholder="Daniel Livingston", name="nombre">
+        </section>
+        <section>
+        <label for="charge">Cargo:</label>
+        <select id="charge" name="cargo">
+            {% for charge in charges_list %}
+            <option value={{charge.id}}>{{charge.name}}</option>
+            {% endfor %}
+        </select>
+        </section>
+        <section>
+        <label for="email">Correo:</label>
+        <input type="email", id="email", placeholder="daniellstone@some.com", name="correo">
+        </section>
+        <button type="submit">Crear</button>
+    </form>
+</body>
+</html>
