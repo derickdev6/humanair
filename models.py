@@ -13,8 +13,8 @@ class Employee:
 class Charge:
 
     def __init__(self, charge_id, charge_name):
-        self.charge_id = charge_id
-        self.charge_name = charge_name
+        self.id = charge_id
+        self.name = charge_name
 
     def __str__(self):
-        return f'{self.charge_id}: {self.charge_name}'
+        return f'{self.id}: {self.name}'
