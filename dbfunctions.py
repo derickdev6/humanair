@@ -44,5 +44,14 @@ def update(sql_sentence):
     return True if cursor.rowcount > 0 else False
 
 
-def delete():
-    pass
+def delete(sql_sentence):
+    # Connects to DB
+    sqliteConnection = sqlite3.connect('humanairDB.sqlite')
+    cursor = sqliteConnection.cursor()
+    # Print statement and execution
+    cursor.execute(sql_sentence)
+    sqliteConnection.commit()
+    if cursor.rowcount > 0:
+        print(f'succesfully deleted {cursor.rowcount} items')
+    # cursor.close()
+    return True if cursor.rowcount > 0 else False
