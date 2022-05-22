@@ -48,7 +48,7 @@ h1{
 .list li .name{
     min-width: 15rem;
 }.list li .charge{
-    min-width: 5rem;
+    min-width: 15rem;
 }
 .list li .email{
     min-width: 25rem;
