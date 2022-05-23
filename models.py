@@ -25,8 +25,8 @@ class mEvent:
     def __init__(self, event_id, begin_date, end_date, charge, description):
         self.id = event_id
         self.charge = charge
-        self.begin_date = begin_date
-        self.end_date = end_date
+        self.begin_date = f'{begin_date[8:10]}/{begin_date[5:7]}/{begin_date[0:4]}'
+        self.end_date = f'{end_date[8:10]}/{end_date[5:7]}/{end_date[0:4]}'
         self.description = description
 
     def __str__(self):

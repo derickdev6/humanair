@@ -101,8 +101,8 @@ def eliminarempleado():
     return redirect(url_for('empleados'))
 
 
-# Vista en la cual se ven todos los empleados
-# A partir de esta vista se puede acceder a create, update y delete
+# Vista en la cual se ven todos los eventos
+# A partir de esta vista se puede acceder a create
 @app.route('/eventos')
 def eventos():
     event_list = []
@@ -115,3 +115,25 @@ def eventos():
         # print(str(new_event))
         event_list.append(new_event)
     return render_template('eventos.html', event_list=event_list)
+
+
+## Vista de creacion de un nuevo evento
+@app.route('/nuevoevento', methods=['GET', 'POST'])
+def nuevoevento():
+    if request.method == 'GET':
+        charges_list = []
+        query = dbf.read("""SELECT * FROM cargos""")
+        for item in query:
+            new_charge = Charge(item[0], item[1])
+            charges_list.append(new_charge)
+        return render_template('nuevoevento.html', charges_list=charges_list)
+    elif request.method == 'POST':
+        new_event = mEvent(0, request.form['fecha_ini'],
+                           request.form['fecha_fin'], request.form['cargo'],
+                           request.form['descripcion'])
+        print(str(new_event))
+        dbf.create(
+            f"""INSERT INTO eventos (idCargo , fechaInicio, fechaFin, descripcion) 
+            VALUES({new_event.charge}, "{new_event.begin_date}", "{new_event.end_date}", "{new_event.description}")"""
+        )
+        return redirect(url_for('eventos'))

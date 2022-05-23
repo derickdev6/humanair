@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/nuevoempleado.css') }}">
+    <title>Nuevo evento</title>
+</head>
+<body>
+    <h1>Formulario para nuevo evento</h1>
+    <form action="nuevoevento" method="post">
+
+        <section>
+        <label for="begin_date">Fecha de inicio:</label>
+        <input type="date" id="begin_date" name="fecha_ini" required>
+        </section>
+
+        <section>
+        <label for="begin_date">Fecha de fin:</label>
+        <input type="date" id="end_date" name="fecha_fin" required>
+        </section>
+        
+        <section>
+        <label for="charge">Cargo:</label>
+        <select id="charge" name="cargo">
+            {% for charge in charges_list %}
+            <option value={{charge.id}}>{{charge.name}}</option>
+            {% endfor %}
+        </select>
+        </section>
+
+        <section>
+        <label for="description">descripcion:</label>
+        <input type="textarea", id="description", placeholder="Descripcion breve del evento", name="descripcion" required>
+        </section>
+
+        <button type="submit">Crear</button>
+        
+    </form>
+</body>
+</html>
