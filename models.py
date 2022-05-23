@@ -50,3 +50,13 @@ class User:
             return True
         else:
             return False
+
+
+class Task:
+
+    def __init__(self, task_id, name):
+        self.id = task_id
+        self.name = name
+
+    def __str__(self):
+        return f'{self.id}: {self.name}'

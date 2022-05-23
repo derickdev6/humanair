@@ -1,7 +1,7 @@
 # Imports para el desarrollo de la app
 from multiprocessing import Event
 from flask import Flask, redirect, render_template, request, url_for
-from models import Charge, Employee, mEvent, User
+from models import Charge, Employee, mEvent, User, Task
 import dbfunctions as dbf
 # Entry point
 app = Flask(__name__)
@@ -152,3 +152,65 @@ def nuevoevento():
             VALUES({new_event.charge}, "{new_event.begin_date}", "{new_event.end_date}", "{new_event.description}")"""
         )
         return redirect(url_for('eventos'))
+
+
+@app.route('/tareas')
+def tareas():
+    task_list = []
+    query = dbf.read("""SELECT * FROM tareas """)
+    for item in query:
+        print(item)
+        new_task = Task(item[0], item[1])
+        print(str(new_task))
+        task_list.append(new_task)
+    return render_template('tareas.html', task_list=task_list)
+
+
+## Vista de creacion de una nueva tarea
+@app.route('/nuevatarea', methods=['POST'])
+def nuevatarea():
+    new_task = Task(0, request.form['nombre'])
+    print(str(new_task))
+    dbf.create(f"""INSERT INTO tareas (nombre) VALUES("{new_task.name}")""")
+    return redirect(url_for('tareas'))
+
+
+# Ruta para la vista de asignacion de empleado a una tarea.
+# Se usa desde el tool asignar de la lista de tareas.
+# Muestra un template con los datos de la tarea desde el cual se lanzo
+@app.route('/asignarempleado', methods=['POST'])
+def asignarempleado():
+    employee_list = []
+    query = dbf.read("""SELECT idEmpleado, nombre, c.descripcion, correo 
+        FROM empleados e inner join cargos c on e.idCargo = c.idCargo 
+        ORDER BY nombre""")
+    for item in query:
+        new_emp = Employee(item[0], item[1], item[2], item[3])
+        employee_list.append(new_emp)
+
+    assigned_list = []
+    query = dbf.read(f"""SELECT e.idEmpleado, e.nombre 
+        FROM tareasxempleado t inner join 
+        empleados e on t.idEmpleado = e.idEmpleado 
+        where t.idTarea = {int(request.form['idTarea'])}
+        ORDER BY nombre""")
+    for item in query:
+        new_emp = Employee(item[0], item[1], 0, '')
+        assigned_list.append(new_emp)
+
+    task_to_assign = Task(int(request.form['idTarea']), request.form['nombre'])
+    return render_template('asignarempleado.html',
+                           task_to_assign=task_to_assign,
+                           employee_list=employee_list,
+                           assigned_list=assigned_list)
+
+
+# Ruta para la asignacion de empleados.
+# Unicamente se usa como post y es llamada desde el boton
+# actualizar del template de asignarempleado
+@app.route('/asignacionempleado', methods=['POST'])
+def asignacionempleado():
+    dbf.update(
+        f"""INSERT INTO tareasxempleado (idTarea, idEmpleado) VALUES({request.form['idTarea']}, {request.form['idEmpleado']})"""
+    )
+    return redirect(url_for('tareas'))

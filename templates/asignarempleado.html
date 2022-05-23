@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/asignarempleado.css') }}">
+    <title>Actualizar empleado</title>
+</head>
+<body>
+    <h1>Formulario para asignar empleado</h1>
+    <form action="asignacionempleado" method="post">
+        <section>
+            <label>Asignar a la tarea de id <b>{{task_to_assign.id}}: {{task_to_assign.name}}</b> el empleado</label>
+            <input type="hidden" name="idTarea" value="{{task_to_assign.id}}">
+        </section>
+        
+        <section class="assigned_list">
+            {% for employee in assigned_list %}
+            <label>{{employee.id}} - {{employee.name}}</label>
+            {% endfor %}            
+        </section>
+        
+        <section>
+        <label for="employee">Cargo:</label>
+        <select id="employee" name="idEmpleado">
+            {% for employee in employee_list %}
+            <option value={{employee.id}}>{{employee}}</option>
+            {% endfor %}
+        </select>
+        </section>
+
+        <button type="submit">Asignar</button>
+
+    </form>
+</body>
+</html>

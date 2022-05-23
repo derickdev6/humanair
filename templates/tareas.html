@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tareas</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/tareas.css') }}">
+</head>
+<body>
+    <header>
+        <a href="home">Inicio</a>
+        <h1>Lista de tareas</h1>
+    </header>
+
+    <form action="nuevatarea" method="post">
+        <label for="task_name">Nombre de nueva tarea: </label>
+        <input id="task_name" type="text" name="nombre">
+        <button>Crear</button>
+    </form>
+
+    <ul class="list">
+    {% for task in task_list %}
+        <li class="item">
+
+        <p class="id">ID {{task.id}}</p>
+        <p class="name">{{task.name}}</p>
+        <form class="tools" id="deleteform" method="post">
+            <button class="update" formaction="asignarempleado">+</button>
+            <input type="hidden" name="idTarea" value="{{task.id}}">
+            <input type="hidden" name="nombre" value="{{task.name}}">
+        </form>
+        </li>
+    {% endfor %}
+    </ul>
+    
+</body>
+</html>
