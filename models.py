@@ -1,3 +1,6 @@
+import dbfunctions as dbf
+
+
 class Employee:
 
     def __init__(self, employee_id, name, charge, email):
@@ -31,3 +34,19 @@ class mEvent:
 
     def __str__(self):
         return f'{self.id}, {self.begin_date}, {self.end_date}, {self.charge}, {self.description}'
+
+
+class User:
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+    def exists(self):
+        query = dbf.read(
+            f"""SELECT * FROM users WHERE username = '{self.username}' AND password = '{self.password}'"""
+        )
+        if query:
+            return True
+        else:
+            return False

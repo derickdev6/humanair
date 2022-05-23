@@ -1,7 +1,7 @@
 # Imports para el desarrollo de la app
 from multiprocessing import Event
 from flask import Flask, redirect, render_template, request, url_for
-from models import Charge, Employee, mEvent
+from models import Charge, Employee, mEvent, User
 import dbfunctions as dbf
 # Entry point
 app = Flask(__name__)
@@ -9,7 +9,22 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return redirect(url_for('home'))
+    return redirect(url_for('login'))
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    elif request.method == 'POST':
+        print(request.form)
+        login_user = User(request.form['username'], request.form['password'])
+        if login_user.exists():
+            print("Correct user")
+            return redirect(url_for('home'))
+        else:
+            print("Incorrect User")
+            return redirect(url_for('login'))
 
 
 @app.route('/home')
