@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/eventos.css') }}">
+</head>
+<body>
+    <header>
+        <a href="/">Inicio</a>
+        <h1>Lista de eventos</h1>
+    </header>
+
+
+    <ul class="list">
+    {% for event in event_list %}
+        <li class="item">
+        <p class="id">ID {{event.id}}</p>
+        <p class="date">{{event.begin_date}} - {{event.end_date}}</p>
+        <p class="charge">{{event.charge}}</p>
+        <p class="description">{{event.description}}</p>
+
+
+        </li>
+    {% endfor %}
+    </ul>
+    
+</body>
+</html>

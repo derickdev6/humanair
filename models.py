@@ -18,3 +18,16 @@ class Charge:
 
     def __str__(self):
         return f'{self.id}: {self.name}'
+
+
+class mEvent:
+
+    def __init__(self, event_id, begin_date, end_date, charge, description):
+        self.id = event_id
+        self.charge = charge
+        self.begin_date = begin_date
+        self.end_date = end_date
+        self.description = description
+
+    def __str__(self):
+        return f'{self.id}, {self.begin_date}, {self.end_date}, {self.charge}, {self.description}'

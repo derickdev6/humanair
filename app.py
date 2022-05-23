@@ -1,6 +1,7 @@
 # Imports para el desarrollo de la app
+from multiprocessing import Event
 from flask import Flask, redirect, render_template, request, url_for
-from models import Charge, Employee
+from models import Charge, Employee, mEvent
 import dbfunctions as dbf
 # Entry point
 app = Flask(__name__)
@@ -21,9 +22,9 @@ def home():
 @app.route('/empleados')
 def empleados():
     employee_list = []
-    query = dbf.read(
-        """SELECT idEmpleado, nombre, c.descripcion, correo FROM empleados e inner join cargos c on e.idCargo = c.idCargo ORDER BY nombre"""
-    )
+    query = dbf.read("""SELECT idEmpleado, nombre, c.descripcion, correo 
+        FROM empleados e inner join cargos c on e.idCargo = c.idCargo 
+        ORDER BY nombre""")
     for item in query:
         new_emp = Employee(item[0], item[1], item[2], item[3])
         employee_list.append(new_emp)
@@ -49,24 +50,15 @@ def nuevoempleado():
                                 int(request.form['cargo']),
                                 request.form['correo'])
         # print(str(new_employee))
-        dbf.create(
-            f"""INSERT INTO empleados (idCargo, nombre, correo) VALUES({new_employee.charge}, "{new_employee.name}", "{new_employee.email}")"""
-        )
+        dbf.create(f"""INSERT INTO empleados (idCargo, nombre, correo) 
+            VALUES({new_employee.charge}, "{new_employee.name}", "{new_employee.email}")"""
+                   )
         return redirect(url_for('empleados'))
 
 
-@app.route('/actualizacionempleado', methods=['POST'])
-def actualizacionempleado():
-    updt_employee = Employee(int(request.form['idEmpleado']),
-                             request.form['nombre'],
-                             int(request.form['cargo']),
-                             request.form['correo'])
-    dbf.update(
-        f"""UPDATE empleados SET nombre = '{updt_employee.name}', idCargo = {updt_employee.charge}, correo = '{updt_employee.email}' WHERE idEmpleado = {updt_employee.id}"""
-    )
-    return redirect(url_for('empleados'))
-
-
+# Ruta para la vista de actualizacion de empleado.
+# Se usa desde el tool update de la lista de empleados.
+# Muestra un template con los datos del empleado desde el cual se lanzo
 @app.route('/actualizarempleado', methods=['POST'])
 def actualizarempleado():
     charges_list = []
@@ -81,9 +73,45 @@ def actualizarempleado():
                            emp_to_update=emp_to_update)
 
 
+# Ruta para la actualizacion de empleados.
+# Unicamente se usa como post y es llamada desde el boton
+# actualizar del template de actualizarempleado
+@app.route('/actualizacionempleado', methods=['POST'])
+def actualizacionempleado():
+    updt_employee = Employee(int(request.form['idEmpleado']),
+                             request.form['nombre'],
+                             int(request.form['cargo']),
+                             request.form['correo'])
+    dbf.update(f"""UPDATE empleados SET 
+        nombre = '{updt_employee.name}', 
+        idCargo = {updt_employee.charge}, 
+        correo = '{updt_employee.email}' 
+        WHERE idEmpleado = {updt_employee.id}""")
+    return redirect(url_for('empleados'))
+
+
+# Eliminar empleado, se lanza desde el tool delete
+# de la lista de empleados y elimina directamente al
+# empleado desde el cual se lanzo
 @app.route('/eliminarempleado', methods=['POST'])
 def eliminarempleado():
     dbf.delete(
         f"""DELETE FROM empleados WHERE idEmpleado = {request.form['idEmpleado']}"""
     )
     return redirect(url_for('empleados'))
+
+
+# Vista en la cual se ven todos los empleados
+# A partir de esta vista se puede acceder a create, update y delete
+@app.route('/eventos')
+def eventos():
+    event_list = []
+    query = dbf.read(
+        """SELECT idEvento, fechaInicio, fechaFin, c.descripcion, e.descripcion 
+            FROM eventos e inner join cargos c on e.idCargo = c.idCargo """)
+    for item in query:
+        # print(item)
+        new_event = mEvent(item[0], item[1], item[2], item[3], item[4])
+        # print(str(new_event))
+        event_list.append(new_event)
+    return render_template('eventos.html', event_list=event_list)
